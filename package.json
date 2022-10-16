@@ -1,0 +1,47 @@
+{
+  "name": "route-list",
+  "version": "1.0.1",
+  "description": "Beautifully shows Express/Koa/Hapi/Fastify routes in CLI.",
+  "bin": "./src/cli.js",
+  "type": "module",
+  "engines": {
+    "node": ">=14.8"
+  },
+  "engineStrict": true,
+  "scripts": {
+    "test": "node --test"
+  },
+  "keywords": [
+    "express",
+    "koa",
+    "hapi",
+    "fastify",
+    "paths",
+    "routes",
+    "endpoints",
+    "list"
+  ],
+  "author": "Vladimir Mikulic",
+  "license": "MIT",
+  "files": [
+    "src"
+  ],
+  "funding": "https://ko-fi.com/vladimirmikulic",
+  "homepage": "https://github.com/VladimirMikulic/route-list#readme",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/VladimirMikulic/route-list.git"
+  },
+  "dependencies": {
+    "chalk": "^5.1.2",
+    "commander": "^9.4.1",
+    "express-list-endpoints": "^6.0.0"
+  },
+  "devDependencies": {
+    "@hapi/hapi": "^20.2.2",
+    "@koa/router": "^12.0.0",
+    "express": "^4.18.2",
+    "fastify": "^4.8.1",
+    "koa": "^2.13.4"
+  }
+}
