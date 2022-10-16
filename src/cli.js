@@ -3,11 +3,13 @@
 import { program } from 'commander';
 import fs from 'fs';
 import path from 'path';
+import * as url from 'url';
 import { printRoutes } from './printer.js';
 import { getRoutes } from './routes.js';
 import { getApp, getAppWorkingDirPath, getFrameworkName } from './utils.js';
 
-const pkgJSONFilePath = path.resolve(process.cwd(), 'package.json');
+const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const pkgJSONFilePath = path.resolve(__dirname, '../package.json');
 const pkgJSON = JSON.parse(fs.readFileSync(pkgJSONFilePath));
 
 const examples = [
