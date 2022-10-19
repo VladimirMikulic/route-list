@@ -22,6 +22,7 @@ The program's flow can be broken down in the following steps:
 
 - CLI options and arguments validation
 - Initializing application's environment (.env)
+- (Optional) compiling TypeScript app.ts to app.js
 - Importing application
 - Detecting web framework
 - Parsing routes

@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { execSync } from 'child_process';
 import { program } from 'commander';
 import fs from 'fs';
 import path from 'path';
@@ -54,9 +55,9 @@ try {
     throw new Error(`${appFilePath} is directory, but file expected.`);
 
   const fileExtension = path.extname(appFilePath);
-  const isFileExtValid = ['.js', '.mjs'].includes(fileExtension);
+  const isFileExtValid = ['.ts', '.js', '.mjs'].includes(fileExtension);
   if (!isFileExtValid)
-    throw new Error('Please specify application .js/.mjs file.');
+    throw new Error('Please specify application .ts/.js/.mjs file.');
 
   const appWorkingDirPath = getAppWorkingDirPath(appFilePath);
   if (!appWorkingDirPath)
@@ -76,11 +77,24 @@ try {
     dotenv.config({ path: envFilePath });
   }
 
-  const appExport = await import(appFilePath);
+  const isTypeScriptApp = fileExtension === '.ts';
+  const tscPath = path.join(appWorkingDirPath, 'node_modules/.bin/tsc');
+  if (isTypeScriptApp && !fs.existsSync(tscPath))
+    throw new Error(`Please install typescript in ${appWorkingDirPath}`);
+
+  if (isTypeScriptApp)
+    execSync(`${tscPath} ${appFilePath}`, { cwd: appWorkingDirPath });
+
+  const appJsFilePath = isTypeScriptApp
+    ? appFilePath.replace('.ts', '.js')
+    : appFilePath;
+
+  const appExport = await import(appJsFilePath);
   const app = getApp(appExport.default, frameworkName);
   const routesMap = getRoutes(app, frameworkName);
 
   printRoutes(routesMap, program.opts());
+  if (isTypeScriptApp) fs.rmSync(appJsFilePath);
   process.exit();
 } catch (error) {
   console.error(error.message);

@@ -21,7 +21,7 @@ Before you can use `route-list` on your project, we first need to make sure it's
 In order for `route-list` to work, we need to export server "app".
 The example below is for Express but it also applies to Koa (with @koa/router)/Hapi/Fastify as well.
 
-**app.js**
+**app.js** / **app.ts**
 
 ```js
 const app = express();
