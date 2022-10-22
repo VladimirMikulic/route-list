@@ -52,9 +52,17 @@ app.get('/products/:id', (req, res) => res.sendStatus(200));
 
 ### Examples
 
-- `route-list server/app.js`
-- `route-list --group server/app.js`
-- `route-list --methods GET,POST server/app.js`
+```sh
+route-list server/app.js
+```
+
+```sh
+route-list --group server/app.js
+```
+
+```sh
+route-list --methods GET,POST server/app.js
+```
 
 ## :man: Author
 
