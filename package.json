@@ -3,7 +3,7 @@
   "version": "1.1.1",
   "description": "Beautifully shows Express/Koa/Hapi/Fastify routes in CLI.",
   "bin": "./src/cli.js",
-  "main": "src",
+  "main": "./src/index.js",
   "type": "module",
   "engines": {
     "node": ">=14.8"
