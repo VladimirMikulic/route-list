@@ -1,6 +1,6 @@
 
-import { getRoutes } from './routes';
-import { printRoutes } from './printer';
+import { getRoutes } from './routes.js';
+import { printRoutes } from './printer.js';
 
 const printer = (framework, app, opts) => printRoutes(getRoutes(app, framework), opts)
 
