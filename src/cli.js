@@ -4,25 +4,25 @@ import { execSync } from 'child_process';
 import { program } from 'commander';
 import fs from 'fs';
 import path from 'path';
-import * as url from 'url';
+import { fileURLToPath, pathToFileURL } from 'url';
 import { printRoutes } from './printer.js';
 import { getRoutes } from './routes.js';
 import { getApp, getAppWorkingDirPath, getFrameworkName } from './utils.js';
 
-const __dirname = url.fileURLToPath(new URL('.', import.meta.url));
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const pkgJSONFilePath = path.resolve(__dirname, '../package.json');
 const pkgJSON = JSON.parse(fs.readFileSync(pkgJSONFilePath));
 
 const examples = [
   '  $ route-list server/app.js',
   '  $ route-list --methods GET,POST server/app.js',
-  '  $ route-list --include-paths /users,/events server/app.js'
+  '  $ route-list --include-paths /users,/events server/app.js',
 ];
 
 program
   .name(pkgJSON.name)
   .description(pkgJSON.description)
-  .argument('<appjs-file>')
+  .argument('<app-file>')
   .option('-g, --group', 'Display routes in groups separated with new line')
   .option(
     '-m, --methods <methods>',
@@ -71,9 +71,8 @@ try {
   if (fs.existsSync(envFilePath)) {
     // Loads environment vars in the current process so application
     // that depends on them can be loaded properly below
-    const dotenv = await import(
-      `${appWorkingDirPath}/node_modules/dotenv/lib/main.js`
-    );
+    const dotEnvFilePath = `${appWorkingDirPath}/node_modules/dotenv/lib/main.js`;
+    const dotenv = await import(pathToFileURL(dotEnvFilePath));
     dotenv.config({ path: envFilePath });
   }
 
@@ -89,7 +88,7 @@ try {
     ? appFilePath.replace('.ts', '.js')
     : appFilePath;
 
-  const appExport = await import(appJsFilePath);
+  const appExport = await import(pathToFileURL(appJsFilePath));
   const app = getApp(appExport.default, frameworkName);
   const routesMap = getRoutes(app, frameworkName);
 
