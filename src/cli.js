@@ -88,8 +88,12 @@ try {
     ? appFilePath.replace('.ts', '.js')
     : appFilePath;
 
-  const appExport = await import(pathToFileURL(appJsFilePath));
-  const app = getApp(appExport.default, frameworkName);
+  const { default: defaultExport } = await import(pathToFileURL(appJsFilePath));
+  const app = ['AsyncFunction', 'Function'].includes(
+    defaultExport.constructor.name
+  )
+    ? await defaultExport()
+    : getApp(defaultExport, frameworkName);
   const routesMap = getRoutes(app, frameworkName);
 
   printRoutes(routesMap, program.opts());

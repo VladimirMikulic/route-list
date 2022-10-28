@@ -33,10 +33,12 @@ app.get('/products/:id', (req, res) => res.sendStatus(200));
 // CJS
 // Option 1: module.exports = app;
 // Option 2: module.exports = { app, yourOtherExports... };
+// Option 3: module.exports = functionThatReturnsApp;
 
 // ESM
 // Option 1: export default app;
 // Option 2: export default { app, yourOtherExports... };
+// Option 3: export default functionThatReturnsApp;
 ```
 
 > NOTE: In case you use [SocketIO with Express](https://socket.io/get-started/chat#the-web-framework), make sure to **export Express app**, not `http.createServer` server instance.
