@@ -82,10 +82,14 @@ try {
     throw new Error(`Please install typescript in ${appWorkingDirPath}`);
 
   if (isTypeScriptApp)
-    execSync(`${tscPath} ${appFilePath}`, { cwd: appWorkingDirPath });
+    execSync(`${tscPath} --outDir routelist`, { cwd: appWorkingDirPath });
 
   const appJsFilePath = isTypeScriptApp
-    ? appFilePath.replace('.ts', '.js')
+    ? path.join(
+        appWorkingDirPath,
+        'routelist',
+        appFilePath.replace(appWorkingDirPath, '').replace('.ts', '.js')
+      )
     : appFilePath;
 
   const { default: defaultExport } = await import(pathToFileURL(appJsFilePath));
@@ -97,7 +101,8 @@ try {
   const routesMap = getRoutes(app, frameworkName);
 
   printRoutes(routesMap, program.opts());
-  if (isTypeScriptApp) fs.rmSync(appJsFilePath);
+  if (isTypeScriptApp)
+    fs.rmSync(path.join(appWorkingDirPath, 'routelist'), { recursive: true });
   process.exit();
 } catch (error) {
   console.error(error.message);
