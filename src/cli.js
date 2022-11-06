@@ -81,8 +81,14 @@ try {
   if (isTypeScriptApp && !fs.existsSync(tscPath))
     throw new Error(`Please install typescript in ${appWorkingDirPath}`);
 
-  if (isTypeScriptApp)
-    execSync(`${tscPath} --outDir routelist`, { cwd: appWorkingDirPath });
+  if (isTypeScriptApp) {
+    // || rm -r ./routelist removes routelist directory in case tsc fails
+    const tscErrorMsg = `TSC compilation failed. Please resolve issues in your project.`;
+    execSync(
+      `${tscPath} --outDir routelist || rm -r ./routelist && echo "${tscErrorMsg}" >&2`,
+      { cwd: appWorkingDirPath }
+    );
+  }
 
   const appJsFilePath = isTypeScriptApp
     ? path.join(
@@ -98,9 +104,10 @@ try {
   )
     ? await defaultExport()
     : getApp(defaultExport, frameworkName);
-  const routesMap = getRoutes(app, frameworkName);
 
+  const routesMap = getRoutes(app, frameworkName);
   printRoutes(routesMap, program.opts());
+
   if (isTypeScriptApp)
     fs.rmSync(path.join(appWorkingDirPath, 'routelist'), { recursive: true });
   process.exit();
