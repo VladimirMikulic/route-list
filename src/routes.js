@@ -1,13 +1,14 @@
 import _getExpressRoutes from 'express-list-endpoints';
 
 export const getRoutes = (app, frameworkName) => {
-  const map = {
+  const handlerMap = {
     express: getExpressRoutes,
     koa: getKoaRoutes,
     hapi: getHapiRoutes,
     fastify: getFastifyRoutes,
   };
-  return map[frameworkName] && map[frameworkName](app);
+  const handler = handlerMap[frameworkName];
+  return handler && handler(app);
 };
 
 const getExpressRoutes = app =>
