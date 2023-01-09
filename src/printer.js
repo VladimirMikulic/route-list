@@ -36,14 +36,12 @@ export const printRoutes = (routesMap, options) => {
 
   if (options.includePaths) {
     routes = options.includePaths
-      .map(path => routes.filter(route => route.startsWith(path)))
-      .flat();
+      .flatMap(path => routes.filter(route => route.startsWith(path)));
   }
 
   if (options.excludePaths) {
     routes = options.excludePaths
-      .map(path => routes.filter(route => !route.startsWith(path)))
-      .flat();
+      .flatMap(path => routes.filter(route => !route.startsWith(path)));
   }
 
   const canPrintRoute = (method, route) => {
