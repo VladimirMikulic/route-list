@@ -59,6 +59,7 @@ export const printRoutes = (routesMap, options) => {
     .filter(method => method !== 'HEAD')
     .flat().length;
 
+  console.log();
   for (const [index, route] of sortedRoutes.entries()) {
     if (options.group) {
       const basePath = `/${route.split('/')[1]}`;
