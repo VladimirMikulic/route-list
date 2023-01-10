@@ -60,6 +60,12 @@ export const printRoutes = (routesMap, options) => {
     .flat().length;
 
   for (const [index, route] of sortedRoutes.entries()) {
+    if (options.group) {
+      const basePath = `/${route.split('/')[1]}`;
+      const isGroupBreak =
+        index > 0 && !sortedRoutes[index - 1]?.startsWith(basePath);
+      if (isGroupBreak) console.log();
+    }
 
     if (canPrintRoute('GET', route)) printRoute('GET', route);
     if (canPrintRoute('POST', route)) printRoute('POST', route);
