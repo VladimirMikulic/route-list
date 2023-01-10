@@ -20,8 +20,7 @@ const getExpressRoutes = app =>
 const getKoaRoutes = app =>
   app.middleware
     .filter(middlewareFn => middlewareFn.router)
-    .map(middlewareFn => middlewareFn.router.stack)
-    .flat()
+    .flatMap(middlewareFn => middlewareFn.router.stack)
     .reduce((routesMap, route) => {
       if (!routesMap[route.path]) routesMap[route.path] = [];
       routesMap[route.path].push(...route.methods);
