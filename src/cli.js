@@ -99,9 +99,11 @@ try {
     : appFilePath;
 
   const { default: defaultExport } = await import(pathToFileURL(appJsFilePath));
-  const app = ['AsyncFunction', 'Function'].includes(
+  const isDefaultExportFunction = ['AsyncFunction', 'Function'].includes(
     defaultExport.constructor.name
-  )
+  );
+
+  const app = isDefaultExportFunction
     ? await defaultExport()
     : getApp(defaultExport, frameworkName);
 

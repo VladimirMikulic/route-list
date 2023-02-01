@@ -29,9 +29,9 @@ export const getFrameworkName = appWorkingDirPath => {
   return null;
 };
 
+// See README for different export options
 export const getApp = (appExport, frameworkName) => {
-  const isExportEmpty = Object.keys(appExport).length === 0;
-  if (isExportEmpty) return null;
+  // hapi app instance also has an internal "app" property
   if (frameworkName === 'hapi')
     return appExport.app?.app ? appExport.app : appExport;
   return appExport.app || appExport;

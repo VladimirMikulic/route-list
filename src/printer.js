@@ -6,7 +6,7 @@ const printRoute = (method, route) => {
     POST: chalk.yellowBright,
     PATCH: chalk.yellowBright,
     PUT: chalk.yellowBright,
-    DELETE: chalk.redBright
+    DELETE: chalk.redBright,
   };
 
   const coloredMethod = colorMap[method](method);
@@ -32,47 +32,48 @@ const printRoute = (method, route) => {
 };
 
 export const printRoutes = (routesMap, options) => {
-  let routes = Object.keys(routesMap);
+  const { includePaths, excludePaths, methods, group } = options;
+  const routesMapToPrint = Object.keys(routesMap)
+    .sort()
+    .filter(route => {
+      if (includePaths)
+        return includePaths.some(path => route.startsWith(path));
+      if (excludePaths)
+        return !excludePaths.some(path => route.startsWith(path));
+      return true;
+    })
+    .reduce((map, route) => {
+      // We currently don't display only HEAD routes (without GET)
+      // That case is probably very rare, might revisit in the future if enough interest from the community
+      const methodsToPrint = routesMap[route].filter(
+        method => method !== 'HEAD' && (!methods || methods.includes(method))
+      );
+      if (methodsToPrint.length === 0) return map;
+      map[route] = methodsToPrint;
+      return map;
+    }, {});
 
-  if (options.includePaths) {
-    routes = options.includePaths
-      .flatMap(path => routes.filter(route => route.startsWith(path)));
-  }
-
-  if (options.excludePaths) {
-    routes = options.excludePaths
-      .flatMap(path => routes.filter(route => !route.startsWith(path)));
-  }
-
-  const canPrintRoute = (method, route) => {
-    const methods = routesMap[route];
-    return (
-      methods.includes(method) &&
-      (!options.methods || options.methods.includes(method))
-    );
-  };
-
-  const sortedRoutes = routes.sort();
-  // We currently don't display only HEAD routes (without GET)
-  // That case is probably very rare, might revisit in the future if enough interest from the community
-  const totalRoutesNum = Object.values(routesMap)
-    .filter(method => method !== 'HEAD')
-    .flat().length;
+  const printedRoutesCount = Object.values(routesMapToPrint).flat().length;
 
   console.log();
-  for (const [index, route] of sortedRoutes.entries()) {
-    if (options.group) {
+  let previousRoute;
+  for (const [route, methods] of Object.entries(routesMapToPrint)) {
+    if (group) {
       const basePath = `/${route.split('/')[1]}`;
       const isGroupBreak =
-        index > 0 && !sortedRoutes[index - 1]?.startsWith(basePath);
+        previousRoute && !previousRoute?.startsWith(basePath);
+
       if (isGroupBreak) console.log();
+      previousRoute = route;
     }
 
-    if (canPrintRoute('GET', route)) printRoute('GET', route);
-    if (canPrintRoute('POST', route)) printRoute('POST', route);
-    if (canPrintRoute('PATCH', route)) printRoute('PATCH', route);
-    if (canPrintRoute('PUT', route)) printRoute('PUT', route);
-    if (canPrintRoute('DELETE', route)) printRoute('DELETE', route);
+    if (methods.includes('GET')) printRoute('GET', route);
+    if (methods.includes('POST')) printRoute('POST', route);
+    if (methods.includes('PATCH')) printRoute('PATCH', route);
+    if (methods.includes('PUT')) printRoute('PUT', route);
+    if (methods.includes('DELETE')) printRoute('DELETE', route);
   }
-  console.log(`\n  Listed ${chalk.greenBright(totalRoutesNum)} HTTP routes.\n`);
+  console.log(
+    `\n  Listed ${chalk.greenBright(printedRoutesCount)} HTTP routes.\n`
+  );
 };

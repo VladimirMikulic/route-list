@@ -5,7 +5,6 @@ export const getRoutes = (app, frameworkName) => {
   if (frameworkName === 'koa') return getKoaRoutes(app);
   if (frameworkName === 'hapi') return getHapiRoutes(app);
   if (frameworkName === 'fastify') return getFastifyRoutes(app);
-  return null;
 };
 
 const getExpressRoutes = app =>
