@@ -8,7 +8,7 @@
 
 ![route-list CLI example](./screenshots/showcase.png)
 
-## :package: Installation
+## 📦 Installation
 
 ```sh
 # Installs the package so it's globally accessible in terminal
@@ -43,7 +43,7 @@ app.get('/products/:id', (req, res) => res.sendStatus(200));
 
 > NOTE: In case you use [SocketIO with Express](https://socket.io/get-started/chat#the-web-framework), make sure to **export Express app**, not `http.createServer` server instance.
 
-## :cloud: Usage
+## ☁️ Usage
 
 ### Options
 
@@ -66,7 +66,19 @@ route-list --group server/app.js
 route-list --methods GET,POST server/app.js
 ```
 
-## :man: Author
+## 💻 Programmatic Usage
+
+```js
+import RouteList from 'route-list';
+
+// Example result { "/": ["GET"], "/users": ["GET", "POST"] }
+const routesMap = RouteList.getRoutes(app, 'express');
+
+// Print routes to console
+RouteList.printRoutes(routesMap);
+```
+
+## 👨 Author
 
 **Vladimir Mikulic**
 
@@ -74,11 +86,11 @@ route-list --methods GET,POST server/app.js
 - Github: [@VladimirMikulic](https://github.com/VladimirMikulic)
 - LinkedIn: [@vladimirmikulic](https://www.linkedin.com/in/vladimir-mikulic/)
 
-## :handshake: Contributing
+## 🤝 Contributing
 
 Contributions, issues and feature requests are welcome!
 
-## :beers: Credits
+## 🍻 Credits
 
 The project was inspired by new `route:list` command in Laravel 9.
 New [`route:list`](https://github.com/laravel/framework/pull/40269) itself was
@@ -86,10 +98,10 @@ inspired by [`pretty-routes`](https://github.com/Wulfheart/pretty-routes) projec
 Big thanks to [Λlex Wulf](https://twitter.com/alexfwulf) for building
 `pretty-routes` and Laravel community for recognizing the usefulness of the project.
 
-## :pencil: License
+## ✏️ License
 
 This project is licensed under [MIT](https://opensource.org/licenses/MIT) license.
 
-## :man_astronaut: Show your support
+## 👨‍🚀 Show your support
 
 Give a ⭐️ if this project helped you!
