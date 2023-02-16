@@ -66,6 +66,8 @@ route-list --group server/app.js
 route-list --methods GET,POST server/app.js
 ```
 
+> NOTE: In case an app is part of NX monorepo, make sure to build it first.
+
 ## 💻 Programmatic Usage
 
 ```js
