@@ -49,8 +49,10 @@ const getFastifyRoutes = app => {
   // "<spaces> activity (GET)" -> "activity"
   const getSegment = line => line.replace(/ \(.*\)/g, '').trim();
 
-  // "<spaces> activity (GET)" -> "GET"
-  const getMethod = line => line.trim().split(' ')[1].slice(1, -1);
+  // "<spaces> activity (GET)" -> ["GET"] <= v4.13
+  // "<spaces> activity (POST)" -> ["POST"] <= v4.13
+  // "<spaces> activity (GET, POST)" -> ["GET", "POST"] > v4.13
+  const getMethods = line => line.trim().split(' (')[1].slice(0,-1).split(", ");
 
   const segments = lines.reduce((allSegments, line, index) => {
     const segment = getSegment(line);
@@ -60,7 +62,7 @@ const getFastifyRoutes = app => {
       const entries = allSegments.filter(
         item => item.index < index && item.segment === segment
       );
-      entries[entries.length - 1].methods.push(getMethod(line));
+      entries[entries.length - 1].methods.push(...getMethods(line));
       return allSegments;
     }
 
@@ -68,7 +70,7 @@ const getFastifyRoutes = app => {
     const spaces = line.replace(/ \(.*\)/g, '').match(/ /g).length;
     const depth = spaces / 4;
     const isRoute = line.includes('(');
-    const methods = isRoute ? [getMethod(line)] : null;
+    const methods = isRoute ? getMethods(line) : null;
 
     allSegments.push({ segment, index, depth, isRoute, methods });
     return allSegments;

@@ -1,7 +1,8 @@
 # route-list
 
 ![Version](https://img.shields.io/npm/v/route-list)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](#)
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)
+[![CI](https://github.com/VladimirMikulic/route-list/actions/workflows/ci.yml/badge.svg)](https://github.com/VladimirMikulic/route-list/actions)
 [![Twitter: VladoDev](https://img.shields.io/twitter/follow/VladoDev.svg?style=social)](https://twitter.com/VladoDev)
 
 > ✨ Beautifully shows Express/Koa/Hapi/Fastify routes in CLI.
@@ -19,7 +20,7 @@ npm i route-list -g
 
 Before you can use `route-list` on your project, we first need to make sure it's configured properly.
 In order for `route-list` to work, we need to export server "app".
-The example below is for Express but it also applies to Koa (with @koa/router)/Hapi/Fastify as well.
+The example below is for Express but it also applies to Koa (with @koa/router)/Hapi/Fastify.
 
 **app.js** / **app.ts**
 
