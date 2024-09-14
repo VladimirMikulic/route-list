@@ -22,7 +22,7 @@ test('Fastify Routes', () => {
     '/activity/:id': ['GET', 'HEAD'],
     '/users': ['GET', 'HEAD'],
     '/users/:id': ['GET', 'HEAD', 'PUT'],
-    '/users/following': ['GET']
+    '/users/following': ['GET', 'HEAD']
   };
 
   assert.deepStrictEqual(actualRoutesMap, expectedRoutesMap);
