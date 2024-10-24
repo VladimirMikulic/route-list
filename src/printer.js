@@ -32,7 +32,7 @@ const printRoute = (method, route) => {
 };
 
 export const printRoutes = (routesMap, options) => {
-  const { includePaths, excludePaths, methods, group } = options;
+  const { includePaths, excludePaths, methods, group } = options || {};
   const routesMapToPrint = Object.keys(routesMap)
     .sort()
     .filter(route => {
