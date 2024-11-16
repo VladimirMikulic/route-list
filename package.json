@@ -44,6 +44,7 @@
   "devDependencies": {
     "@hapi/hapi": "^21.3.11",
     "@koa/router": "^13.1.0",
+    "@types/express": "^5.0.0",
     "express": "^4.21.1",
     "fastify": "^5.0.0",
     "koa": "^2.15.3"
