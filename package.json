@@ -42,10 +42,10 @@
     "express-list-endpoints": "^7.1.0"
   },
   "devDependencies": {
-    "@hapi/hapi": "^21.3.11",
-    "@koa/router": "^13.1.0",
+    "@hapi/hapi": "^21.4.3",
+    "@koa/router": "^14.0.0",
     "express": "^4.21.1",
-    "fastify": "^5.0.0",
-    "koa": "^2.15.3"
+    "fastify": "^5.6.1",
+    "koa": "^3.0.2"
   }
 }
