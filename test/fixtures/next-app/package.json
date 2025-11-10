@@ -1,0 +1,7 @@
+{
+  "name": "next-app",
+  "type": "module",
+  "dependencies": {
+    "next": "^14.0.0"
+  }
+} 

@@ -8,6 +8,7 @@ import { fileURLToPath, pathToFileURL } from 'url';
 import { printRoutes } from './printer.js';
 import { getRoutes } from './routes.js';
 import { getApp, getAppWorkingDirPath, getFrameworkName } from './utils.js';
+import { NEXT_FRAMEWORK } from './constants.js';
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const pkgJSONFilePath = path.resolve(__dirname, '../package.json');
@@ -17,6 +18,11 @@ const examples = [
   '  $ route-list server/app.js',
   '  $ route-list --methods GET,POST server/app.js',
   '  $ route-list --include-paths /users,/events server/app.js',
+  '  # For Next.js apps:',
+  '  $ route-list app/api',                         // Point directly to API directory
+  '  $ route-list app/api --group',                 // Group API routes
+  '  $ route-list app/api --methods GET,POST',      // Filter API routes by methods
+  '  $ route-list app/api --include-paths /users'   // Filter specific API paths
 ];
 
 program
@@ -50,6 +56,26 @@ try {
   if (!fs.existsSync(appFilePath))
     throw new Error('No such file, invalid path provided.');
 
+  const appWorkingDirPath = getAppWorkingDirPath(appFilePath);
+  if (!appWorkingDirPath)
+    throw new Error('Please initialize local package.json.');
+
+  const frameworkName = getFrameworkName(appWorkingDirPath);
+  if (!frameworkName)
+    throw new Error("Couldn't detect supported back-end framework.");
+
+  // Special handling for Next.js
+  if (frameworkName === NEXT_FRAMEWORK) {
+    const stats = fs.statSync(appFilePath);
+    if (!stats.isDirectory()) {
+      throw new Error('For Next.js apps, please provide the app directory path');
+    }
+    const routesMap = getRoutes(appFilePath, frameworkName);
+    printRoutes(routesMap, program.opts());
+    process.exit();
+  }
+
+  // Validation for traditional frameworks
   const isPathFile = fs.statSync(appFilePath).isFile();
   if (!isPathFile)
     throw new Error(`${appFilePath} is directory, but file expected.`);
@@ -58,14 +84,6 @@ try {
   const isFileExtValid = ['.ts', '.js', '.mjs'].includes(fileExtension);
   if (!isFileExtValid)
     throw new Error('Please specify application .ts/.js/.mjs file.');
-
-  const appWorkingDirPath = getAppWorkingDirPath(appFilePath);
-  if (!appWorkingDirPath)
-    throw new Error('Please initialize local package.json.');
-
-  const frameworkName = getFrameworkName(appWorkingDirPath);
-  if (!frameworkName)
-    throw new Error("Couldn't detect supported back-end framework.");
 
   const envFilePath = `${appWorkingDirPath}/.env`;
   if (fs.existsSync(envFilePath)) {
